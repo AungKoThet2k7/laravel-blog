@@ -81,10 +81,10 @@
             @auth
                 <div class="container">
                     <div class="row g-3">
-                        <div class="col-3">
+                        <div class="col-2">
                             @include('layouts.sidebar')
                         </div>
-                        <div class="col-9">
+                        <div class="col-10">
                             @yield('content')
                         </div>
                     </div>
