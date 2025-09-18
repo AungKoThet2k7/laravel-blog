@@ -4,12 +4,12 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Manage Post</li>
+            <li class="breadcrumb-item active" aria-current="page">Manage User</li>
         </ol>
     </nav>
     <div class="card">
         <div class="card-body">
-            <h4>Manage Post</h4>
+            <h4>Manage User</h4>
             <hr>
 
             <div class="d-flex mb-3 justify-content-between align-items-center">
@@ -34,37 +34,35 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Owner</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
                         <th scope="col">Control</th>
                         <th scope="col">Created_at</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($posts as $post)
+                    @forelse ($users as $user)
                         <tr>
-                            <th scope="row">{{ $post->id }}</th>
+                            <th scope="row">{{ $user->id }}</th>
                             <td>
-                                {{ $post->title }}
+                                {{ $user->name }}
+                                <br>
+                                <span class="badge bg-info">{{ $user->role }}</span>
                             </td>
                             <td class="text-nowrap">
-                                {{ App\Models\Category::find($post->category_id)->title }}
-                            </td>
-                            <td>
-                                {{ App\Models\User::find($post->user_id)->name }}
+                                {{ $user->email }}
                             </td>
                             <td class="text-nowrap text-center">
-                                <a class="btn btn-sm btn-outline-dark" href="{{ route('post.show', $post->id) }}"><i
+                                <a class="btn btn-sm btn-outline-dark" href="{{ route('user.show', $user->id) }}"><i
                                         class="bi bi-info-circle"></i></a>
-                                @can('update', $post)
-                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('post.edit', $post->id) }}"><i
+                                @can('update', $user)
+                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('user.edit', $user->id) }}"><i
                                             class="bi bi-pencil"></i></a>
                                 @endcan
 
-                                @can('delete', $post)
-                                    <form action="{{ route('post.destroy', $post->id) }}" class="d-inline-block"
-                                        method="post">
+                                @can('delete', $user)
+                                    <form action="{{ route('user.destroy', $user->id) }}" class="d-inline-block"
+                                        method="user">
                                         @csrf
                                         @method('DELETE')
                                         <button onclick="return confirm('Are you sure?')" class="btn btn-sm btn-outline-dark"><i
@@ -75,19 +73,19 @@
                             </td>
                             <td>
                                 <p class="text-sm mb-0 text-nowrap"><i class="bi bi-calendar"></i>
-                                    {{ $post->created_at->format('d M Y') }}</p>
+                                    {{ $user->created_at->format('d M Y') }}</p>
                                 <p class="text-sm mb-0"><i class="bi bi-clock"></i>
-                                    {{ $post->created_at->format('g : m A') }}</p>
+                                    {{ $user->created_at->format('g : m A') }}</p>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center">No Post Found</td>
+                            <td colspan="6" class="text-center">No user Found</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
-            <div class="">{{ $posts->onEachSide(1)->links() }}</div>
+            <div class="">{{ $users->onEachSide(1)->links() }}</div>
         </div>
     </div>
 @endsection

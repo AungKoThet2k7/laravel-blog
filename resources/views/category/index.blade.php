@@ -28,19 +28,35 @@
                             <td>
                                 {{ $category->title }}
                                 <br>
-                                <span class="badge bg-info">{{ $category->slug }}</span>
+                                <span class="badge bg-info me-1">
+                                    {{ $category->slug }}
+                                </span>
+                                <span class="badge bg-info">
+                                    <i class="bi bi-person"></i>
+                                    {{ App\Models\User::find($category->user_id)->name }}
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                @can('update', $category)
+                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('category.edit', $category->id) }}">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                @endcan
+                                @can('delete', $category)
+                                    <form action="{{ route('category.destroy', $category->id) }}" class="d-inline-block"
+                                        method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button onclick="return confirm('Are you sure?')" class="btn btn-sm btn-outline-dark"><i
+                                                class="bi bi-trash"></i></button>
+                                    </form>
+                                @endcan
                             </td>
                             <td>
-                                <a class="btn btn-sm btn-outline-dark" href="{{ route('category.edit', $category->id) }}"><i class="bi bi-pencil"></i></a>
-                                <form action="{{ route('category.destroy', $category->id) }}" class="d-inline-block" method="post">
-                                    @csrf
-                                    @method("DELETE")
-                                    <button  onclick="return confirm('Are you sure?')"  class="btn btn-sm btn-outline-dark"><i class="bi bi-trash"></i></button>
-                                </form>
-                            </td>
-                            <td>
-                                <p class="text-sm mb-0"><i class="bi bi-calendar"></i> {{$category->created_at->format("d M Y")}}</p>
-                                <p class="text-sm mb-0"><i class="bi bi-clock"></i> {{$category->created_at->format("g : m A")}}</p>
+                                <p class="text-sm mb-0"><i class="bi bi-calendar"></i>
+                                    {{ $category->created_at->format('d M Y') }}</p>
+                                <p class="text-sm mb-0"><i class="bi bi-clock"></i>
+                                    {{ $category->created_at->format('g : m A') }}</p>
                             </td>
                         </tr>
                     @endforeach

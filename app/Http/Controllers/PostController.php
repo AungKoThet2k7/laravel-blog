@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -94,6 +95,8 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
+        Gate::denies('update', $post) ? abort(403, "You are not allowed to update this post") : null;
+
         $post->title = $request->title;
         $post->slug = Str::slug($request->title);
         $post->description = $request->description;
@@ -122,6 +125,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        Gate::denies('delete', $post) ? abort(403, "You are not allowed to delete this post") : null;
         $postTitle = $post->title;
 
         if (isset($post->featured_image)) {

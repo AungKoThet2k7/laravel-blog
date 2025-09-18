@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends Controller
 {
@@ -79,6 +80,9 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
+
+        Gate::authorize('update', $category);
+
         $category->title = $request->title;
         $category->slug = Str::slug($request->title);
         $category->update();
@@ -93,6 +97,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        Gate::authorize('delete', $category);
         $categoryTitle = $category->title;
         $category->delete();
         return redirect()->route('category.index')->with('status', $categoryTitle . ' has been deleted successfully');
