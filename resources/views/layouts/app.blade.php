@@ -56,6 +56,10 @@
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    <span class="badge bg-info">
+                                        {{ Auth::user()->role }}
+                                    </span>
+                                    <br>
                                     {{ Auth::user()->name }}
                                 </a>
 

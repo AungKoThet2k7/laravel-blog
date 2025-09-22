@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,5 +27,21 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Paginator::useBootstrapFive();
+
+        // Blade::directive('Hello', function ($data) {
+        //     return " Min ga lar par " . $data;
+        // });
+
+        // Blade::if("test", function ($data) {
+        //     return $data;
+        // });
+
+        Blade::if("admin", function () {
+            return Auth::user()->role === 'admin';
+        });
+
+        Blade::if("notAuthor", function(){
+            return Auth::user()->role !== 'author';
+        });
     }
 }

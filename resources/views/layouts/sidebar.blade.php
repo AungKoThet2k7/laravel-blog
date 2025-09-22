@@ -36,11 +36,13 @@
 
 </div>
 
-<p class="font-weight-bold mb-1">Manage User</p>
-<div class="list-group mb-3">
+@admin
+    <p class="font-weight-bold mb-1">Manage User</p>
+    <div class="list-group mb-3">
 
-    <a class="list-group-item list-group-item-action bg-white" href="{{ route('user.index') }}">
-        User List
-    </a>
+        <a class="list-group-item list-group-item-action bg-white" href="{{ route('user.index') }}">
+            User List
+        </a>
 
-</div>
+    </div>
+@endadmin

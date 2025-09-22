@@ -18,19 +18,12 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
-
-        User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'password' => Hash::make("asdffdsa"),
-        ]);
-
-        User::factory(10)->create();
+        
 
         $this->call([
+            UserSeeder::class,
             CategorySeeder::class,
             PostSeeder::class
         ]);
-
     }
 }

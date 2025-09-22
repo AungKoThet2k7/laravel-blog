@@ -29,12 +29,15 @@
                                 {{ $category->title }}
                                 <br>
                                 <span class="badge bg-info me-1">
+                                    <i class="bi bi-grid"></i>
                                     {{ $category->slug }}
                                 </span>
-                                <span class="badge bg-info">
-                                    <i class="bi bi-person"></i>
-                                    {{ App\Models\User::find($category->user_id)->name }}
-                                </span>
+                                @notAuthor
+                                    <span class="badge bg-info">
+                                        <i class="bi bi-person"></i>
+                                        {{ App\Models\User::find($category->user_id)->name }}
+                                    </span>
+                                @endnotAuthor
                             </td>
                             <td class="text-center">
                                 @can('update', $category)

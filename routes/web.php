@@ -26,8 +26,8 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/test', [App\Http\Controllers\HomeController::class, 'test'])->name('test');
 
-ROute::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () {
     Route::resource('/post', PostController::class);
     Route::resource('/category', CategoryController::class);
-    Route::resource('/user', UserController::class);
+    Route::middleware('admin')->resource('/user', UserController::class);
 });

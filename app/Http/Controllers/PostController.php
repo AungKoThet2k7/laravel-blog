@@ -24,7 +24,11 @@ class PostController extends Controller
             $search = request("s");
             $q->orWhere("title", "like", "%$search%");
             $q->orWhere("description", "like", "%$search%");
-        })->latest('id')->paginate(10)->withQueryString();
+        })
+            ->latest('id')
+            ->when(Auth::user()->isAuthor(), fn($q) => $q->where("user_id", Auth::id()))
+            ->paginate(10)
+            ->withQueryString();
         return view('post.index', compact('posts'));
     }
 
@@ -72,6 +76,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        Gate::authorize("view", $post);
         return view('post.show', compact('post'));
     }
 
@@ -83,6 +88,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        Gate::authorize("update", $post);
         return view('post.edit', compact('post'));
     }
 
@@ -125,7 +131,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        Gate::denies('delete', $post) ? abort(403, "You are not allowed to delete this post") : null;
+        Gate::authorize('delete', $post);
         $postTitle = $post->title;
 
         if (isset($post->featured_image)) {

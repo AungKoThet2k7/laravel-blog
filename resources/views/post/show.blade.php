@@ -15,7 +15,7 @@
             <div class="mb-3">
 
                 <span class="badge bg-info">
-                    <i class="bi bi-bookmark"></i>
+                    <i class="bi bi-grid"></i>
                     {{ App\Models\Category::find($post->category_id)->title }}
                 </span>
 

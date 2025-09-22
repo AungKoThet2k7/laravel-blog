@@ -36,7 +36,9 @@
                         <th scope="col">#</th>
                         <th scope="col">Title</th>
                         <th scope="col">Category</th>
-                        <th scope="col">Owner</th>
+                        @notAuthor
+                            <th scope="col">Owner</th>
+                        @endnotAuthor
                         <th scope="col">Control</th>
                         <th scope="col">Created_at</th>
                     </tr>
@@ -51,9 +53,11 @@
                             <td class="text-nowrap">
                                 {{ App\Models\Category::find($post->category_id)->title }}
                             </td>
-                            <td>
-                                {{ App\Models\User::find($post->user_id)->name }}
-                            </td>
+                            @notAuthor
+                                <td>
+                                    {{ App\Models\User::find($post->user_id)->name }}
+                                </td>
+                            @endnotAuthor
                             <td class="text-nowrap text-center">
                                 <a class="btn btn-sm btn-outline-dark" href="{{ route('post.show', $post->id) }}"><i
                                         class="bi bi-info-circle"></i></a>
