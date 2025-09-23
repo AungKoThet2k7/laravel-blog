@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\NationController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -29,5 +30,6 @@ Route::get('/test', [App\Http\Controllers\HomeController::class, 'test'])->name(
 Route::middleware('auth')->group(function () {
     Route::resource('/post', PostController::class);
     Route::resource('/category', CategoryController::class);
+    Route::resource('/nation', NationController::class);
     Route::middleware('admin')->resource('/user', UserController::class);
 });

@@ -16,12 +16,12 @@
 
                 <span class="badge bg-info">
                     <i class="bi bi-grid"></i>
-                    {{ App\Models\Category::find($post->category_id)->title }}
+                    {{ $post->category->title }}
                 </span>
 
                 <span class="badge bg-info">
                     <i class="bi bi-person"></i>
-                    {{ App\Models\User::find($post->user_id)->name }}
+                    {{ $post->user->name }}
                 </span>
 
                 <span class="badge bg-info">
@@ -37,7 +37,7 @@
             </div>
 
             @isset($post->featured_image)
-                <img class="mb-3 w-50 rounded " src="{{ asset('storage/' . $post->featured_image) }}" alt="">
+                <img class="me-4 mb-3 w-50 rounded float-start" src="{{ asset('storage/' . $post->featured_image) }}" alt="">
             @endisset
             <p class="mb-3 text-justify">{{ $post->description }}</p>
             <hr>
