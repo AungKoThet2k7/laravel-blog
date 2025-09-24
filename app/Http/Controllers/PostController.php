@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Models\Photo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Request;
@@ -65,6 +66,18 @@ class PostController extends Controller
         }
 
         $post->save();
+
+        foreach ($request->photos as $photo) {
+            $newName = uniqid() . "_post_photo." . $photo->extension();
+            $photo->storeAs('public', $newName);
+
+            $photo = new Photo();
+            $photo->name = $newName;
+            $photo->post_id = $post->id;
+            $photo->save();
+        }
+
+
         return redirect()->route('post.index')->with('status', $post->title . ' has been created successfully');
     }
 
@@ -101,14 +114,13 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
-        Gate::denies('update', $post) ? abort(403, "You are not allowed to update this post") : null;
+        Gate::authorize("update", $post);
 
         $post->title = $request->title;
         $post->slug = Str::slug($request->title);
         $post->description = $request->description;
         $post->excerpt = Str::words($request->description, 50, ' ...');
         $post->category_id = $request->category;
-        $post->user_id = Auth::id();
 
         if ($request->hasFile('featured_image')) {
 
@@ -120,6 +132,17 @@ class PostController extends Controller
         }
 
         $post->update();
+
+        foreach ($request->photos as $photo) {
+            $newName = uniqid() . "_post_photo." . $photo->extension();
+            $photo->storeAs('public', $newName);
+
+            $photo = new Photo();
+            $photo->name = $newName;
+            $photo->post_id = $post->id;
+            $photo->save();
+        }
+
         return redirect()->route('post.index')->with('status', $post->title . ' has been updated successfully');
     }
 
@@ -136,6 +159,15 @@ class PostController extends Controller
 
         if (isset($post->featured_image)) {
             Storage::delete('public/' . $post->featured_image);
+        };
+
+        foreach ($post->photos as $photo) {
+
+            // delete photo from storage
+            Storage::delete('public/' . $photo->name);
+
+            // delete photo from database
+            $photo->delete();
         };
 
         $post->delete();

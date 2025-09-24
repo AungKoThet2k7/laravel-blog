@@ -40,6 +40,11 @@
                 <img class="me-4 mb-3 w-50 rounded float-start" src="{{ asset('storage/' . $post->featured_image) }}" alt="">
             @endisset
             <p class="mb-3 text-justify">{{ $post->description }}</p>
+
+            @foreach ($post->photos as $photo)
+                <img class="rounded me-3 mb-3" height="100" src="{{ asset('storage/' . $photo->name ) }}" alt="">
+            @endforeach
+
             <hr>
             <div class="d-flex justify-content-between align-items-center">
                 <a href="{{ route('post.create') }}" class="btn btn-outline-primary">Create New Post</a>

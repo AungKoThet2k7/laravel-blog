@@ -27,7 +27,6 @@ class PostFactory extends Factory
             "slug"=> Str::slug($title),
             "description"=> $description,
             "excerpt"=> Str::words($description, 50, ' ...'),
-            "featured_image"=> "68d0ff2aa7f9e_featured_image.jpg",
             "category_id"=> Category::inRandomOrder()->first()->id,
             "user_id" => User::inRandomOrder()->first()->id,
         ];

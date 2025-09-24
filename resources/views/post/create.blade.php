@@ -8,7 +8,7 @@
             <li class="breadcrumb-item active" aria-current="page">Create Post</li>
         </ol>
     </nav>
-    <div class="card">
+    <div class="card bg-white">
         <div class="card-body">
             <h4>Create Post</h4>
             <hr>
@@ -36,6 +36,20 @@
                 </div>
 
                 <div class="mb-3">
+                    <label for="photos" class="form-label">Post Photo</label>
+                    <input name="photos[]" id="photos" multiple class="form-control @error('photos') is-invalid @enderror @error('photos.*') is-invalid @enderror" 
+                        type="file">
+
+                    @error('photos')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+
+                    @error('photos.*')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
                     <label class="form-label" for="description">Description</label>
                     <textarea class="form-control @error('description') is-invalid @enderror" name="description" id="description"
                         rows="7">{{ old('description') }}</textarea>
@@ -46,7 +60,7 @@
 
                 <div class="mb-3 d-flex justify-content-between align-items-end">
                     <div class="">
-                        <label for="featured_image" class="form-label">Featured Image {{ old('featured_image') }}</label>
+                        <label for="featured_image" class="form-label">Featured Image</label>
                         <input name="featured_image" id="featured_image"
                             class="form-control @error('featured_image') is-invalid @enderror" type="file">
                         @error('featured_image')
