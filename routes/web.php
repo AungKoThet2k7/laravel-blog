@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\NationController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
@@ -19,9 +20,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/', [PageController::class, 'index'])->name('page.index');
+Route::get('/detail/{slug}', [PageController::class, 'detail'])->name('page.detail');
+Route::get('/cat/{category:slug}', [PageController::class, 'postByCategory'])->name('page.category');
 
 Auth::routes();
 
