@@ -28,6 +28,7 @@ class PostController extends Controller
         })
             ->latest('id')
             ->when(Auth::user()->isAuthor(), fn($q) => $q->where("user_id", Auth::id()))
+            ->with(['category', 'user'])
             ->paginate(10)
             ->withQueryString();
         return view('post.index', compact('posts'));
@@ -67,14 +68,16 @@ class PostController extends Controller
 
         $post->save();
 
-        foreach ($request->photos as $photo) {
-            $newName = uniqid() . "_post_photo." . $photo->extension();
-            $photo->storeAs('public', $newName);
+        if ($request->hasFile('photos')) {
+            foreach ($request->photos as $photo) {
+                $newName = uniqid() . "_post_photo." . $photo->extension();
+                $photo->storeAs('public', $newName);
 
-            $photo = new Photo();
-            $photo->name = $newName;
-            $photo->post_id = $post->id;
-            $photo->save();
+                $photo = new Photo();
+                $photo->name = $newName;
+                $photo->post_id = $post->id;
+                $photo->save();
+            }
         }
 
 
@@ -133,14 +136,16 @@ class PostController extends Controller
 
         $post->update();
 
-        foreach ($request->photos as $photo) {
-            $newName = uniqid() . "_post_photo." . $photo->extension();
-            $photo->storeAs('public', $newName);
+        if ($request->hasFile('photos')) {
+            foreach ($request->photos as $photo) {
+                $newName = uniqid() . "_post_photo." . $photo->extension();
+                $photo->storeAs('public', $newName);
 
-            $photo = new Photo();
-            $photo->name = $newName;
-            $photo->post_id = $post->id;
-            $photo->save();
+                $photo = new Photo();
+                $photo->name = $newName;
+                $photo->post_id = $post->id;
+                $photo->save();
+            }
         }
 
         return redirect()->route('post.index')->with('status', $post->title . ' has been updated successfully');

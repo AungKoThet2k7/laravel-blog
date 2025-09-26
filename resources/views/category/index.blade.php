@@ -17,6 +17,7 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Title</th>
+                        <th scope="col">Post Count</th>
                         <th scope="col">Control</th>
                         <th scope="col">Created_at</th>
                     </tr>
@@ -37,6 +38,9 @@
                                         {{ $category->user->name }}
                                     </span>
                                 @endnotAuthor
+                            </td>
+                            <td>
+                                {{ $category->posts()->count() }}
                             </td>
                             <td class="text-center">
                                 @can('update', $category)
