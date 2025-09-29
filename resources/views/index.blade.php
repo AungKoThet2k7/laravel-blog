@@ -4,12 +4,21 @@
         <div class="row justify-content-center">
             <div class="col-12 col-lg-8">
                 <h2 class="text-center my-3">Blog Posts</h2>
-                @isset($category)
+
+                @if (request()->has('s') || isset($category))
                     <div class="mb-3 d-flex justify-content-between align-items-center">
-                        <p class="mb-0"><span>Filter by : </span>{{ $category->title }}</p>
+                        <div class="d-flex gap-1">
+                            @isset($category)
+                                <p class="mb-0"><span>Filter by : </span>{{ $category->title }}</p>
+                            @endisset
+                            @if (request()->has('s'))
+                                <p class="mb-0"><span>Search by : </span>{{ request('s') }}</p>
+                            @endif
+                        </div>
                         <a href="{{ route('page.index') }}" class="btn btn-outline-info">See All Posts</a>
                     </div>
-                @endisset
+                @endif
+
                 @forelse ($posts as $post)
                     <div class="card mb-3">
                         <div class="card-body">

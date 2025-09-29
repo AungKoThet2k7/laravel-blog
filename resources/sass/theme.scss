@@ -2,6 +2,7 @@
 @import url('https://fonts.bunny.net/css?family=Nunito');
 
 @import 'bootstrap-icons/font/bootstrap-icons.css';
+@import 'venobox/dist/venobox.min.css';
 
 // Variables
 @import 'variables';
@@ -10,3 +11,12 @@
 @import 'bwvariables';
 @import 'bootstrap/scss/bootstrap';
 @import 'bootswatch';
+
+::-webkit-scrollbar{
+    display: none;
+}
+
+.post-detail-img{
+    height: 300px;
+    object-fit: contain;
+}

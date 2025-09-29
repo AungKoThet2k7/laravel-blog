@@ -8,7 +8,7 @@
     </nav>
     <div class="card bg-white">
         <div class="card-body ">
-            Hello World 
+            Hello, {{ Auth::user()->name }}
         </div>
     </div>
 @endsection

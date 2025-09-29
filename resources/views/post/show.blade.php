@@ -39,7 +39,7 @@
             @isset($post->featured_image)
                 <img class="me-4 mb-3 w-50 rounded float-start" src="{{ asset('storage/' . $post->featured_image) }}" alt="">
             @endisset
-            <p class="mb-3 text-justify">{{ $post->description }}</p>
+            <p class="mb-3 text-justify" style="white-space: pre-wrap">{{ $post->description }}</p>
 
             @foreach ($post->photos as $photo)
                 <img class="rounded me-3 mb-3" height="100" src="{{ asset('storage/' . $photo->name ) }}" alt="">

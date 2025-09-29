@@ -23,7 +23,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($categories as $category)
+                    @forelse ($categories as $category)
                         <tr>
                             <th scope="row">{{ $category->id }}</th>
                             <td>
@@ -65,7 +65,11 @@
                                     {{ $category->created_at->format('g : m A') }}</p>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="6" class="text-center">No Category Found <span><i class="bi bi-heartbreak-fill text-danger"></i></span></td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
 
