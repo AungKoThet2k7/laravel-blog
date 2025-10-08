@@ -1,9 +1,8 @@
-@extends('master')
+@extends('templates.master')
 @section('content')
-    <div class="container">
+    <div class="container my-3">
         <div class="row justify-content-center">
             <div class="col-12 col-lg-8">
-                <h2 class="text-center my-3">Blog Posts</h2>
 
                 @if (request()->has('s') || isset($category))
                     <div class="mb-3 d-flex justify-content-between align-items-center">

@@ -1,18 +1,18 @@
-@extends('master')
+@extends('templates.master')
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-12 col-lg-8">
+            <div class="col-12 col-lg-9">
                 <div class="card my-5">
                     <div class="card-body">
-                        <div class="mb-3 text-center">
+                        <div class="text-center">
                             <h3 class="mb-0 card-header">{{ $post->title }}</h3>
                             <a href="{{ route('page.category', $post->category->slug) }}">
-                                <span class=" badge bg-info">{{ $post->category->title }}</span>
+                                <span class="my-1 badge bg-info">{{ $post->category->title }}</span>
                             </a>
                         </div>
                         <div class="text-center">
-                            @if ($post->photos->count() > 0)
+                            @if ($post->photos->count())
                                 <div id="carouselExample" class="carousel slide">
                                     <div class="carousel-inner">
                                         @foreach ($post->photos as $key => $photo)
@@ -58,6 +58,17 @@
                                 <a href="{{ route('page.index') }}" class="btn btn-primary">All Post</a>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3">
+                <div class="my-5">
+                    <div class="list-group">
+                        <h3 class="text-center mt-2">Recent Posts</h3>
+                        @foreach ($recentPosts as $recentPost)
+                        <a class="list-group-item list-group-item-action {{ $recentPost->id === $post->id ? 'active' : '' }}" href="{{ route('page.detail', $recentPost->slug) }}" >{{ $recentPost->title }}</a>
+                        @endforeach
                     </div>
                 </div>
             </div>

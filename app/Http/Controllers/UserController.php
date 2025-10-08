@@ -24,7 +24,9 @@ class UserController extends Controller
             $q->orWhere("name", "like", "%$search%");
             $q->orWhere("email", "like", "%$search%");
         })->paginate(10)->withQueryString();
-        return view('user.index', compact('users'));
+
+        $links = ["Manage User" => route("user.index")];
+        return view('user.index', compact('users', 'links'));
     }
 
     /**

@@ -10,7 +10,8 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-md navbar-light  shadow-sm position-sticky top-0 z-1">
+
+    <nav class="blur-5 navbar navbar-expand-md navbar-light  shadow-sm position-sticky top-0 z-1">
         <div class="container">
             <a class="navbar-brand text-white" href="{{ url('/') }}">
                 {{ config('app.name', 'Laravel') }}
@@ -45,13 +46,16 @@
                     @endif
 
                     <li class="nav-item dropdown me-3">
-                        <a class="nav-link dropdown-toggle text-white" href="#" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle text-white" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
                             Category
                         </a>
                         <ul class="dropdown-menu">
-                            @foreach (App\Models\Category::all() as $category)
-                                <li><a class="dropdown-item"
+                            <li><a class="dropdown-item {{ request()->url() === route('page.index') ? 'active' : '' }}"
+                                    href="{{ route('page.index') }}">All Category</a>
+                            </li>
+                            @foreach ($categories as $category)
+                                <li><a class="dropdown-item {{ request()->url() === route('page.category', $category->slug) ? 'active' : '' }}"
                                         href="{{ route('page.category', $category->slug) }}">{{ $category->title }}</a>
                                 </li>
                             @endforeach
@@ -100,6 +104,7 @@
             </div>
         </div>
     </nav>
+
 
     @yield('content')
 

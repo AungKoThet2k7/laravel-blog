@@ -22,7 +22,9 @@ class CategoryController extends Controller
             ->when(Auth::user()->isAuthor(), fn($q) => $q->where("user_id", Auth::id()))
             ->with(['user'])
             ->get();
-        return view('category.index', compact('categories'));
+
+        $links = ["Manage Category" => route("category.index")];    
+        return view('category.index', compact('categories', 'links'));
     }
 
     /**
@@ -32,7 +34,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view("category.create");
+        $links = ["Manage Category" => route("category.index"), "Create" => route("category.create")];
+        return view("category.create", compact('links'));
     }
 
     /**
@@ -73,7 +76,8 @@ class CategoryController extends Controller
     {
         Gate::authorize('update', $category);
 
-        return view('category.edit', compact('category'));
+        $links = ["Manage Category" => route("category.index"), "Edit" => route("category.edit", $category)];
+        return view('category.edit', compact('category', 'links'));
     }
 
     /**

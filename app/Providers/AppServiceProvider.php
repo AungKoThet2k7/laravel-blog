@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Category;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -28,6 +30,18 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrapFive();
 
+        // View::share('categories', Category::latest('id')->get());
+
+        View::composer(
+            [
+                'index',
+                'detail',
+                'post.create',
+                'post.edit'
+            ],
+            fn($view) => $view->with('categories', Category::latest('id')->get())
+        );
+
         // Blade::directive('Hello', function ($data) {
         //     return " Min ga lar par " . $data;
         // });
@@ -40,7 +54,7 @@ class AppServiceProvider extends ServiceProvider
             return Auth::user()->role === 'admin';
         });
 
-        Blade::if("notAuthor", function(){
+        Blade::if("notAuthor", function () {
             return Auth::user()->role !== 'author';
         });
     }

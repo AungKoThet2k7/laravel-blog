@@ -31,7 +31,9 @@ class PostController extends Controller
             ->with(['category', 'user'])
             ->paginate(10)
             ->withQueryString();
-        return view('post.index', compact('posts'));
+
+        $links = ["Manage Post" => route("post.index")];
+        return view('post.index', compact('posts', 'links'));
     }
 
     /**
@@ -41,7 +43,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('post.create');
+        $links = ["Manage Post" => route("post.index"), "Create" => route("post.create")];
+        return view('post.create', compact('links'));
     }
 
     /**
@@ -93,7 +96,8 @@ class PostController extends Controller
     public function show(Post $post)
     {
         Gate::authorize("view", $post);
-        return view('post.show', compact('post'));
+        $links = ["Manage Post" => route("post.index"), "Detail" => route("post.show", $post)];
+        return view('post.show', compact('post', 'links'));
     }
 
     /**
@@ -105,7 +109,9 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         Gate::authorize("update", $post);
-        return view('post.edit', compact('post'));
+
+        $links = ["Manage Post" => route("post.index"), "Edit" => route("post.edit", $post)];
+        return view('post.edit', compact('post', 'links'));
     }
 
     /**

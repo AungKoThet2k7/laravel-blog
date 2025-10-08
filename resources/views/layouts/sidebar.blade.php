@@ -4,9 +4,9 @@
         Home
     </a>
 
-    <a class="list-group-item list-group-item-action bg-white" href="{{ route('test') }}">
+    {{-- <a class="list-group-item list-group-item-action bg-white" href="{{ route('test') }}">
         Test
-    </a>
+    </a> --}}
 
     <a class="list-group-item list-group-item-action bg-white" href="{{ route('photo.index') }}">
         Gallery

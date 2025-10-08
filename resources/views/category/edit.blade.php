@@ -1,18 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('category.index') }}">Manage Category</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Edit Category</li>
-        </ol>
-    </nav>
-    <div class="card bg-white">
-        <div class="card-body">
-            <h4>Edit Category</h4>
-            <hr>
-            <form action="{{ route('category.update', $category->id) }}" method="post">
+
+    <x-breadcrumb :links="$links"/>
+
+    <x-card>
+        <x-slot:title>Edit Category</x-slot:title>
+        <form action="{{ route('category.update', $category->id) }}" method="post">
                 @csrf
                 @method("PUT")
                 <div class="row">
@@ -28,7 +22,5 @@
                     </div>
                 </div>
             </form>
-
-        </div>
-    </div>
+    </x-card>
 @endsection
