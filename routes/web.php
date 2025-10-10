@@ -32,6 +32,7 @@ Auth::routes();
 
 // Route::get('/test', [App\Http\Controllers\HomeController::class, 'test'])->name('test');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('/home-upload', [App\Http\Controllers\HomeController::class, 'upload'])->name('home.upload');
 
 Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::resource('/post', PostController::class);

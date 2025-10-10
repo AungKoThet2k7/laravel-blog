@@ -16,7 +16,7 @@
 
             <div class="gallery">
                 @forelse (Auth::user()->photos as $photo)
-                    <img class="w-100 rounded mb-3" src="{{ asset('storage/' . $photo->name) }}" alt="">
+                    <img class="w-100 rounded mb-3" src="{{ asset('storage/500/' . $photo->name) }}" alt="">
                 @empty
                     <p>No Photo</p>
                 @endforelse

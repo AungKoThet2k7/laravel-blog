@@ -7,10 +7,12 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Photo;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class PostController extends Controller
 {
@@ -21,14 +23,10 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::when(request("s"), function ($q) {
-            $search = request("s");
-            $q->orWhere("title", "like", "%$search%");
-            $q->orWhere("description", "like", "%$search%");
-        })
+        $posts = Post::search()
             ->latest('id')
             ->when(Auth::user()->isAuthor(), fn($q) => $q->where("user_id", Auth::id()))
-            ->with(['category', 'user'])
+            ->when(request('trash'), fn($q) => $q->onlyTrashed())
             ->paginate(10)
             ->withQueryString();
 
@@ -55,36 +53,80 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        $post = new Post();
-        $post->title = $request->title;
-        $post->slug = Str::slug($request->title);
-        $post->description = $request->description;
-        $post->excerpt = Str::words($request->description, 50, ' ...');
-        $post->category_id = $request->category;
-        $post->user_id = Auth::id();
 
-        if ($request->hasFile('featured_image')) {
-            $newFileName = uniqid() . "_featured_image." . $request->file('featured_image')->extension();
-            $request->file('featured_image')->storeAs('public', $newFileName);
-            $post->featured_image = $newFileName;
-        }
+        try {
+            DB::beginTransaction();
 
-        $post->save();
 
-        if ($request->hasFile('photos')) {
-            foreach ($request->photos as $photo) {
-                $newName = uniqid() . "_post_photo." . $photo->extension();
-                $photo->storeAs('public', $newName);
+            $post = new Post();
 
-                $photo = new Photo();
-                $photo->name = $newName;
-                $photo->post_id = $post->id;
-                $photo->save();
+            $post->title = $request->title;
+            $post->slug = Str::slug($request->title);
+            $post->description = $request->description;
+            $post->excerpt = Str::words($request->description, 50, ' ...');
+            $post->category_id = $request->category;
+            $post->user_id = Auth::id();
+
+            if ($request->hasFile('featured_image')) {
+                $newFileName = uniqid() . "_featured_image." . $request->file('featured_image')->extension();
+
+                $image = Image::make($request->file('featured_image'));
+
+                //Small
+                $image->fit(500, 500);
+                Storage::makeDirectory('public/500');
+                $image->save("storage/500/$newFileName");
+
+                // $request->file('featured_image')->storeAs('public', $newFileName);
+
+                // Db  
+                $post->featured_image = $newFileName;
             }
+
+            $post->save();
+
+            $savedPhotos = [];
+
+            if ($request->hasFile('photos')) {
+                foreach ($request->photos as $key => $photo) {
+                    $newName = uniqid() . "_post_photo." . $photo->extension();
+
+                    $image = Image::make($photo);
+
+                    //Large
+                    $image->resize(1000, null, fn($constraint) => $constraint->aspectRatio());
+                    Storage::makeDirectory('public/1000');
+                    $image->save("storage/1000/$newName");
+
+                    //Small
+                    $image->fit(500, 500);
+                    Storage::makeDirectory('public/500');
+                    $image->save("storage/500/$newName");
+
+                    // $photo->storeAs('public', $newName);
+
+                    $savedPhotos[$key] = [
+                        "post_id" => $post->id,
+                        "name" => $newName,
+                    ];
+
+                    // $photo = new Photo();
+                    //     $photo->name = $newName;
+                    //     $photo->post_id = $post->id;
+                    //     $photo->save();
+                }
+
+
+                //Multiple insert
+                Photo::insert($savedPhotos);
+
+                DB::commit();
+                return redirect()->route('post.index')->with('status', $post->title . ' has been created successfully');
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $e->getMessage();
         }
-
-
-        return redirect()->route('post.index')->with('status', $post->title . ' has been created successfully');
     }
 
     /**
@@ -96,7 +138,9 @@ class PostController extends Controller
     public function show(Post $post)
     {
         Gate::authorize("view", $post);
+
         $links = ["Manage Post" => route("post.index"), "Detail" => route("post.show", $post)];
+
         return view('post.show', compact('post', 'links'));
     }
 
@@ -133,10 +177,20 @@ class PostController extends Controller
 
         if ($request->hasFile('featured_image')) {
 
-            Storage::delete('public/' . $post->featured_image);
+            Storage::delete('public/500/' . $post->featured_image);
 
             $newFileName = uniqid() . "_featured_image." . $request->file('featured_image')->extension();
-            $request->file('featured_image')->storeAs('public', $newFileName);
+
+            $image = Image::make($request->file('featured_image'));
+
+            //Small
+            $image->fit(500, 500);
+            Storage::makeDirectory('public/500');
+            $image->save("storage/500/$newFileName");
+
+            // $request->file('featured_image')->storeAs('public', $newFileName);
+
+            // Db
             $post->featured_image = $newFileName;
         }
 
@@ -145,7 +199,20 @@ class PostController extends Controller
         if ($request->hasFile('photos')) {
             foreach ($request->photos as $photo) {
                 $newName = uniqid() . "_post_photo." . $photo->extension();
-                $photo->storeAs('public', $newName);
+
+                $image = Image::make($photo);
+
+                //Large
+                $image->resize(1000, null, fn($constraint) => $constraint->aspectRatio());
+                Storage::makeDirectory('public/1000');
+                $image->save("storage/1000/$newName");
+
+                //Small
+                $image->fit(500, 500);
+                Storage::makeDirectory('public/500');
+                $image->save("storage/500/$newName");
+
+                // $photo->storeAs('public', $newName);
 
                 $photo = new Photo();
                 $photo->name = $newName;
@@ -163,26 +230,46 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy($id)
     {
+        $post = Post::withTrashed()->findOrFail($id);
+        // return $post;
         Gate::authorize('delete', $post);
         $postTitle = $post->title;
 
-        if (isset($post->featured_image)) {
-            Storage::delete('public/' . $post->featured_image);
-        };
+        if (request('delete') === 'force'):
 
-        foreach ($post->photos as $photo) {
+            if (isset($post->featured_image)) {
+                Storage::delete('public/500/' . $post->featured_image);
+            };
 
-            // delete photo from storage
-            Storage::delete('public/' . $photo->name);
+            // foreach ($post->photos as $photo) {
 
-            // delete photo from database
-            $photo->delete();
-        };
+            //     // delete photo from storage
+            //     Storage::delete('public/' . $photo->name);
 
-        $post->delete();
+            //     // delete photo from database
+            //     // $photo->delete();
+            // };
 
-        return redirect()->route('post.index')->with('status', $postTitle . ' has been deleted successfully');
+            // delete photos from storage
+            Storage::delete($post->photos->map(fn($photo) => "public/500/" . $photo->name)->toArray());
+            Storage::delete($post->photos->map(fn($photo) => "public/1000/" . $photo->name)->toArray());
+
+            // delete photos from database
+            Photo::where("post_id", $post->id)->delete();
+
+            $post->forceDelete();
+            $message = $postTitle . ' has been deleted successfully';
+
+        elseif (request('delete') === 'restore'):
+            $post->restore();
+            $message = $postTitle . ' has been restore successfully';
+        else:
+            $post->delete();
+            $message = $postTitle . ' is move to trash successfully';
+        endif;
+
+        return redirect()->route('post.index')->with('status', $message);
     }
 }

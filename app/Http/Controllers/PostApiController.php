@@ -9,12 +9,8 @@ class PostApiController extends Controller
 {
     public function index()
     {
-        $posts = Post::when(request("s"), function ($q) {
-            $search = request("s");
-            $q->orWhere("title", "like", "%$search%");
-            $q->orWhere("description", "like", "%$search%");
-        })->latest('id')
-            ->with(['category', 'user'])
+        $posts = Post::search()
+            ->latest('id')
             ->paginate(10)
             ->withQueryString();
         return response()->json($posts);
@@ -22,7 +18,7 @@ class PostApiController extends Controller
 
     public function detail($slug)
     {
-        $post = Post::where("slug", $slug)->with(["category", "user"])->first();
+        $post = Post::where("slug", $slug)->first();
         return response()->json($post);
     }
 }

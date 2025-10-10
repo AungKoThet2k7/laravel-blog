@@ -63,20 +63,36 @@
                             @endcan
 
                             @can('delete', $post)
-                                <form action="{{ route('post.destroy', $post->id) }}" class="d-inline-block" method="post">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button onclick="return confirm('Are you sure?')" class="btn btn-sm btn-outline-dark"><i
-                                            class="bi bi-trash"></i></button>
-                                </form>
+                                @trash
+                                    {{-- Restore --}}
+                                    <form action="{{ route('post.destroy', [$post->id, 'delete' => 'restore']) }}"
+                                        class="d-inline-block" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-sm btn-outline-dark"><i class="bi bi-recycle"></i></button>
+                                    </form>
+
+                                    {{-- Force Delete --}}
+                                    <form action="{{ route('post.destroy', [$post->id, 'delete' => 'force']) }}"
+                                        class="d-inline-block" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button onclick="return confirm('Are you sure to delete this post forever?')"
+                                            class="btn btn-sm btn-outline-dark"><i class="bi bi-trash3"></i></button>
+                                    </form>
+                                @else
+                                    {{-- Soft Delete --}}
+                                    <form action="{{ route('post.destroy', $post->id) }}" class="d-inline-block" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-sm btn-outline-dark"><i class="bi bi-trash"></i></button>
+                                    </form>
+                                @endtrash
                             @endcan
 
                         </td>
                         <td>
-                            <p class="text-sm mb-0 text-nowrap"><i class="bi bi-calendar"></i>
-                                {{ $post->created_at->format('d M Y') }}</p>
-                            <p class="text-sm mb-0"><i class="bi bi-clock"></i>
-                                {{ $post->created_at->format('g : m A') }}</p>
+                            {!! $post->time !!}
                         </td>
                     </tr>
                 @empty

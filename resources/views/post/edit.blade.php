@@ -56,7 +56,7 @@
 
             @foreach ($post->photos as $photo)
                 <div class="d-inline-block position-relative me-2 mb-3">
-                    <img class="rounded" height="100" src="{{ asset('storage/' . $photo->name) }}" alt="">
+                    <img class="rounded" height="100" src="{{ asset('storage/500/' . $photo->name) }}" alt="">
                     <form class="" action="{{ route('photo.destroy', $photo->id) }}" method="post">
                         @csrf
                         @method('DELETE')
@@ -82,7 +82,7 @@
             <div class="d-flex gap-3">
 
                 @isset($post->featured_image)
-                    <img class="rounded" height="70" src="{{ asset('storage/' . $post->featured_image) }}" alt="">
+                    <img class="rounded" height="70" src="{{ asset('storage/500/' . $post->featured_image) }}" alt="">
                 @endisset
 
                 <div class="">

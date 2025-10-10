@@ -10,12 +10,8 @@ class PageController extends Controller
 {
     public function index()
     {
-        $posts = Post::when(request("s"), function ($q) {
-            $search = request("s");
-            $q->orWhere("title", "like", "%$search%");
-            $q->orWhere("description", "like", "%$search%");
-        })->latest('id')
-            ->with(['category', 'user'])
+        $posts = Post::search()
+            ->latest('id')
             ->paginate(10)
             ->withQueryString();
         return view("index", compact("posts"));
@@ -23,7 +19,7 @@ class PageController extends Controller
 
     public function detail($slug)
     {
-        $post = Post::where("slug", $slug)->with(["category", "user"])->first();
+        $post = Post::where("slug", $slug)->first();
         $recentPosts = Post::latest('id')->limit(5)->get();
         return view("detail", compact("post", "recentPosts"));
     }
@@ -39,7 +35,6 @@ class PageController extends Controller
         })
             ->latest('id')
             ->where("category_id", $category->id)
-            ->with(['category', 'user'])
             ->paginate(10)
             ->withQueryString();
         return view("index", compact("posts", "category"));

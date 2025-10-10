@@ -25,6 +25,10 @@
         Create Post
     </a>
 
+    <a class="list-group-item list-group-item-action bg-white" href="{{ route('post.index', ['trash' => true]) }}">
+        Trash Post
+    </a>
+
 </div>
 
 <p class="font-weight-bold mb-1">Manage Category</p>

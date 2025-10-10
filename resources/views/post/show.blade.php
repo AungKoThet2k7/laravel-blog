@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
     <x-breadcrumb :links="$links" />
 
     <x-card>
@@ -31,13 +30,16 @@
 
         </div>
 
+
         @isset($post->featured_image)
-            <img class="me-4 mb-3 w-50 rounded float-start" src="{{ asset('storage/' . $post->featured_image) }}" alt="">
+            <img class="me-4 w-50 rounded float-start" src="{{ asset('storage/500/' . $post->featured_image) }}" alt="">
         @endisset
-        <p class="mb-3 text-justify" style="white-space: pre-wrap">{{ $post->description }}</p>
+        <p class=" text-justify" style="white-space: pre-wrap">{{ $post->description }}</p>
+
+        <hr>
 
         @foreach ($post->photos as $photo)
-            <img class="rounded me-3 mb-3" height="100" src="{{ asset('storage/' . $photo->name) }}" alt="">
+            <img class="rounded me-3 mb-3" height="100" src="{{ asset('storage/500/' . $photo->name) }}" alt="">
         @endforeach
 
         <hr>

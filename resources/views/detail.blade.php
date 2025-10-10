@@ -18,10 +18,10 @@
                                         @foreach ($post->photos as $key => $photo)
                                             <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
                                                 <a class="my-image-links" data-gall="gallery01"
-                                                    href="{{ asset('storage/' . $photo->name) }}"><img
-                                                        class="rounded mb-3 post-detail-img"
-                                                        src="{{ asset('storage/' . $photo->name) }}" alt="">
-                                                </a>
+                                                    href="{{ asset('storage/1000/' . $photo->name) }}"><img
+                                                        class="rounded mb-3 post-detail-img"    
+                                                        src="{{ asset('storage/500/' . $photo->name) }}" alt="">
+                                                </a>    
 
                                             </div>
                                         @endforeach
