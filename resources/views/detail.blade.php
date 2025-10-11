@@ -55,6 +55,7 @@
                                         Edit
                                     </a>
                                 @endcan
+                                <a href="{{ route('page.postPdf', $post->slug) }}" class="btn btn-primary"><i class="bi bi-file-pdf"></i></a>
                                 <a href="{{ route('page.index') }}" class="btn btn-primary">All Post</a>
                             </div>
                         </div>

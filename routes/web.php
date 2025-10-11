@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PageController::class, 'index'])->name('page.index');
 Route::get('/detail/{slug}', [PageController::class, 'detail'])->name('page.detail');
+Route::get('/detail-pdf/{slug}', [PageController::class, 'postPdf'])->name('page.postPdf');
 Route::get('/category/{category:slug}', [PageController::class, 'postByCategory'])->name('page.category');
 
 Auth::routes();

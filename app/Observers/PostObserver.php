@@ -2,7 +2,9 @@
 
 namespace App\Observers;
 
+use App\Mail\MailTesting;
 use App\Models\Post;
+use Illuminate\Support\Facades\Mail;
 
 class PostObserver
 {
@@ -14,7 +16,11 @@ class PostObserver
      */
     public function created(Post $post)
     {
-        logger($post->title. " is created");
+        // $text = $post->user->name . " is Created New Post.";
+
+        // Mail::to("aktgaming2007@gmail.com")->send(new MailTesting($text));
+        
+        // logger($post->user->name . " is Created New Post.");
     }
 
     /**

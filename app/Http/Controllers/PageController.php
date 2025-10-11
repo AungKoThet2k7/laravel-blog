@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class PageController extends Controller
 {
@@ -19,9 +20,21 @@ class PageController extends Controller
 
     public function detail($slug)
     {
-        $post = Post::where("slug", $slug)->first();
+        $post = Post::where("slug", $slug)->firstOrFail();
         $recentPosts = Post::latest('id')->limit(5)->get();
         return view("detail", compact("post", "recentPosts"));
+    }
+
+
+    public function postPdf($slug)
+    {
+        $post = Post::where("slug", $slug)->firstOrFail();
+        
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML("<h1>$post->title</h1>
+        <p>$post->description</p>");
+        return $pdf->stream();
+        // return $pdf->download("$post->slug.pdf");
     }
 
     public function postByCategory(Category $category)
