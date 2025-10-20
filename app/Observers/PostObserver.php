@@ -18,7 +18,7 @@ class PostObserver
     {
         // $text = $post->user->name . " is Created New Post.";
 
-        // Mail::to("aktgaming2007@gmail.com")->send(new MailTesting($text));
+        // Mail::to("akt@example.com")->send(new MailTesting($text));
         
         // logger($post->user->name . " is Created New Post.");
     }
