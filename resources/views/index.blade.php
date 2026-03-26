@@ -38,7 +38,7 @@
                                     </p>
                                 </div>
                                 <div class="">
-                                    <a href="{{ route('page.detail', $post->slug) }}" class="btn btn-primary">See more</a>
+                                    <a href="{{ route('page.detail', $post->slug) }}" class="btn btn-info">See more</a>
                                 </div>
                             </div>
                         </div>

@@ -11,7 +11,7 @@
 
 <body>
 
-    <nav class="blur-5 navbar navbar-expand-md navbar-light  shadow-sm position-sticky top-0 z-1">
+    <nav class="blur-5 bg-primary navbar navbar-expand-md navbar-light  shadow-sm position-sticky top-0 z-1">
         <div class="container">
             <a class="navbar-brand text-white" href="{{ url('/') }}">
                 {{ config('app.name', 'Laravel') }}
@@ -37,7 +37,7 @@
                                 <div class="input-group">
                                     <input type="text" class="form-control" required name="s"
                                         value="{{ request('s') }}" placeholder="Search ...">
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="submit" class="btn btn-info">
                                         <i class="bi bi-search"></i>
                                     </button>
                                 </div>

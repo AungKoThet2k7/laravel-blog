@@ -51,12 +51,12 @@
                             </div>
                             <div class="">
                                 @can('update', $post)
-                                    <a href="{{ route('post.edit', $post->id) }}" class="btn btn-outline-primary me-2">
+                                    <a href="{{ route('post.edit', $post->id) }}" class="btn btn-outline-info me-2">
                                         Edit
                                     </a>
                                 @endcan
-                                <a href="{{ route('page.postPdf', $post->slug) }}" class="btn btn-primary"><i class="bi bi-file-pdf"></i></a>
-                                <a href="{{ route('page.index') }}" class="btn btn-primary">All Post</a>
+                                <a href="{{ route('page.postPdf', $post->slug) }}" class="btn btn-info"><i class="bi bi-file-pdf"></i></a>
+                                <a href="{{ route('page.index') }}" class="btn btn-info">All Post</a>
                             </div>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
                     <div class="list-group">
                         <h3 class="text-center mt-2">Recent Posts</h3>
                         @foreach ($recentPosts as $recentPost)
-                        <a class="list-group-item list-group-item-action {{ $recentPost->id === $post->id ? 'active' : '' }}" href="{{ route('page.detail', $recentPost->slug) }}" >{{ $recentPost->title }}</a>
+                        <a class="list-group-item list-group-item-action {{ $recentPost->id === $post->id ? 'active bg-info border-info' : '' }}" href="{{ route('page.detail', $recentPost->slug) }}" >{{ $recentPost->title }}</a>
                         @endforeach
                     </div>
                 </div>
